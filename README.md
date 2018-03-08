@@ -1,2 +1,2 @@
 # OGX.StarEngineJS.demo
-demo pack for StarEngineJS
+>Demo pack for StarEngineJS (maps & sprites)
