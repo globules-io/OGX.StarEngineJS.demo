@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>OGX StarEngine JS Demo</title>
+        <!--adjust paths as needed here-->
+        <script type="text/javascript" src="js/lib/jquery/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/lib/pixijs/v4/pixi.min.js"></script>
+        <script type="text/javascript" src="js/bin/stats.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.Tile.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.BaseTile.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.Camera.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.Map.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.MapConverter.min.js"></script>
+        <script type="text/javascript" src="js/bin/class.PixiTileEngine.min.js"></script>
+        <script type="text/javascript">		
+		$(document).ready(function(e) {	
+		
+			$(document).on(OGX.StarEngine.TEXTURES_LOADED, function(){
+                $(document).off(OGX.StarEngine.TEXTURES_LOADED);
+                loadMap('map.txt', onMapLoaded);
+            });            
+            
+			let config = {container:'canvas', tileSize:77, zoom:1, levels:3, level:0, layer:'tiles', width:840, height:420, textures:['img/sprites_json/level0', 'img/sprites_json/level1', 'img/sprites_json/level2']};	
+			let TileEngine = new OGX.StarEngine.PixiTileEngine(config);
+			let mapConverter = new OGX.StarEngine.MapConverter();
+			let map;	
+			let camera = new  OGX.StarEngine.Camera({name:'cam', x:1540+39, y:3080+39, viz:{x:14, y:14}});	
+			let dir = {x:0, y:0}
+			let speed = 18;		
+            
+				
+			function loadMap(__file, __cb){
+				let d = new Date(); 
+				$('#load').load('maps/'+__file+'?v='+d.getTime(), function(__data){							
+					$('#load').empty();	
+                    __cb(__data);					
+				});
+			}
+            
+            function onMapLoaded(__data){
+                map = mapConverter.convertMap('map', __data);			
+                TileEngine.setMap(map);
+                TileEngine.setCamera(camera);	
+                setTimeout(start, 1000);
+            }
+			
+			function start(){
+				TileEngine.renderView();
+				TileEngine.start();						
+				let intv = setInterval(move, 10);	
+
+				$(window).on('keydown', function(__e){
+					switch(__e.keyCode){
+						case 40:
+						dir.y = 1;
+						break;
+						
+						case 38:
+						dir.y = -1;
+						break;				
+						
+						case 37:
+						dir.x = -1;
+						break;
+						
+						case 39:
+						dir.x = 1;
+						break;					
+					}			
+				});
+				$(window).on('keyup', function(__e){
+					switch(__e.keyCode){
+						case 40:
+						dir.y = 0;
+						break;
+						
+						case 38:
+						dir.y = 0;
+						break;
+						
+						case 37:
+						dir.x = 0;
+						break;				
+						
+						case 39:
+						dir.x = 0;
+						break;					
+					}
+				});				
+			}
+			
+			function move(){
+				let s = speed;
+				if(dir.x && dir.y){
+					s /= 2;
+				}
+				camera.x += s*dir.x;
+				camera.y += s*dir.y;	
+				
+			}
+			
+		});
+		</script>
+    </head>
+    <body>    
+    	<div id="canvas" style="width:840px; height:420px; border:solid 1px #CCC;"></div>
+    	<div id="load" style="display:none;"></div>
+	</body>
+</html>
