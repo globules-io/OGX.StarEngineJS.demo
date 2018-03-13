@@ -9,28 +9,26 @@
         <!--adjust paths as needed here-->
         <script type="text/javascript" src="js/lib/jquery/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/lib/pixijs/v4/pixi.min.js"></script>
-        <script type="text/javascript" src="js/bin/stats.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.Tile.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.BaseTile.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.Camera.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.Map.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.MapConverter.min.js"></script>
-        <script type="text/javascript" src="js/bin/class.PixiTileEngine.min.js"></script>
+        <script type="text/javascript" src="js/bin/ES6/class.Tile.js"></script>
+        <script type="text/javascript" src="js/bin/ES6/class.Camera.js"></script>
+        <script type="text/javascript" src="js/bin/ES6/class.Map.js"></script>
+        <script type="text/javascript" src="js/bin/ES6/class.MapConverter.js"></script>
+        <script type="text/javascript" src="js/bin/ES6/class.Engine.js"></script>
         <script type="text/javascript">		
 		$(document).ready(function(e) {	
 		
-			$(document).on(OGX.StarEngine.TEXTURES_LOADED, function(){
-                $(document).off(OGX.StarEngine.TEXTURES_LOADED);
+			$(document).on(OGX.StarEngine.Engine.TEXTURES_LOADED, function(){
+                $(document).off(OGX.StarEngine.Engine.TEXTURES_LOADED);
                 loadMap('map.txt', onMapLoaded);
             });            
             
 			let config = {container:'canvas', tileSize:77, zoom:1, levels:3, level:0, layer:'tiles', width:840, height:420, textures:['img/sprites_json/level0', 'img/sprites_json/level1', 'img/sprites_json/level2']};	
-			let TileEngine = new OGX.StarEngine.PixiTileEngine(config);
+			let TileEngine = new OGX.StarEngine.Engine(config);
 			let mapConverter = new OGX.StarEngine.MapConverter();
 			let map;	
 			let camera = new  OGX.StarEngine.Camera({name:'cam', x:1540+39, y:3080+39, viz:{x:14, y:14}});	
 			let dir = {x:0, y:0}
-			let speed = 18;		
+			let speed = 36;		
             
 				
 			function loadMap(__file, __cb){
@@ -111,3 +109,4 @@
     	<div id="load" style="display:none;"></div>
 	</body>
 </html>
+
